@@ -13,8 +13,8 @@
   },
   "packageManager": "npm@10.9.3",
   "overrides": {
-    "react": "$react",
-    "react-dom": "$react-dom"
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
@@ -23,8 +23,10 @@
     "@tailwindcss/typography": "^0.5.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "easymde": "^2.20.0",
     "lucide-react": "^0.544.0",
-    "next": "^15.6.0-canary.17",
+    "markdown-it": "^14.1.0",
+    "next": "15.5.1-canary.39",
     "next-auth": "^5.0.0-beta.29",
     "next-sanity": "^11.2.0-canary.6",
     "only": "^0.0.2",
@@ -39,6 +41,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/markdown-it": "^14.1.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
