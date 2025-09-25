@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
-import markdownit from 'markdown-it'
+import markdownit from "markdown-it";
 import { Skeleton } from "@/components/ui/skeleton";
 import View from "@/components/View";
 
@@ -19,7 +19,21 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   if (!post) return notFound();
 
-  const parsedContent = md.render(post?.pitch || "")
+  console.log("Raw pitch data:", post?.pitch);
+  console.log("Type of pitch:", typeof post?.pitch);
+  
+  // Handle Sanity markdown field - it might be an object or string
+  let markdownText = "";
+  if (typeof post?.pitch === "string") {
+    markdownText = post.pitch;
+  } else if (post?.pitch && typeof post.pitch === "object") {
+    // If it's a Sanity markdown object, extract the text
+    markdownText = post.pitch.text || "";
+  }
+  
+  const parsedContent = md.render(markdownText);
+
+  console.log("Parsed content:", parsedContent);
 
   return (
     <>
@@ -39,7 +53,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
         <div className="space-y-5 mt-10 max-w-4xl mx-auto">
           <div className="flex-between gap-5">
             <Link
-              href={`/users/${post.author?.id}`}
+              href={`/user/${post.author?._id}`}
               className="flex items-center gap-5"
             >
               <Image
@@ -48,37 +62,34 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
                 width={64}
                 height={64}
                 className="rounded-full drop-shadow-lg"
-              >
-
-              </Image>
+              ></Image>
               <div>
                 <p className="text-20-medium">{post.author.name}</p>
                 <p className="text-16-medium">@{post.author.username}</p>
               </div>
             </Link>
-        
+
             <p className="category-tag">{post.category}</p>
           </div>
 
           <h3 className="text-30-bold">Pitch Details</h3>
           {parsedContent ? (
-            <article 
+            <article
               className="prose max-w-xl font-work-sans break-all"
-              dangerouslySetInnerHTML={{__html: parsedContent}}
+              dangerouslySetInnerHTML={{ __html: parsedContent }}
             />
           ) : (
             <p className="no-result">No details provided</p>
           )}
         </div>
-        
-        <hr className="divider"/>
+
+        <hr className="divider" />
 
         {/* Todo: Editior Selected StartUps */}
 
-        <Suspense fallback={<Skeleton className="view_skeleton"/>}>
+        <Suspense fallback={<Skeleton className="view_skeleton" />}>
           <View id={id} />
         </Suspense>
-
       </section>
     </>
   );
